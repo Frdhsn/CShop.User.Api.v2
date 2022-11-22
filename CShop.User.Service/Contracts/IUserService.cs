@@ -15,7 +15,7 @@ namespace CShop.User.Service.Contracts
         Task<UserDTO?> GetUserByUsername(string username);
         Task<UserDTO?> GetUserByEmail(string email);
         Task<UserDTO?> PostUser(UserDTO user);
-        Task<UserDTO?> UpdateUser(int Id, UserDTO user);
+        Task<UserDTO?> UpdateUser(int Id, UpdateUserDTO user);
         Task<Boolean> DeleteUser(int Id);
     }
 }

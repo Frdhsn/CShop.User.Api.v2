@@ -15,6 +15,9 @@ namespace CShop.User.Service.Contracts
         string CreateToken(UserModel user);
 
         int GetLoggedInId();
+        string GetLoggedInUsername();
         string GetTokenCreationTime();
+        Boolean HttpContextExists();
+        void DeleteToken();
     }
 }

@@ -14,12 +14,10 @@ namespace CShop.User.Service.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<UserDTO, UserModel>().ReverseMap();
+            CreateMap<UpdateUserDTO, UserModel>().ReverseMap();
             CreateMap<LoginDTO, UserModel>();
             CreateMap<SignUpDTO, UserModel>();
-            //cart
-            //CreateMap<StoryDTO, Story>().ReverseMap();
-            //CreateMap<UpdateStory, Story>();
-            //CreateMap<ShowStoryDTO, Story>().ReverseMap();
+
         }
     }
 }

@@ -35,6 +35,15 @@ namespace CShop.User.Service.Handler
             }
             return Id;
         }
+        public string GetLoggedInUsername()
+        {
+            var username = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            }
+            return username;
+        }
 
         public string GetTokenCreationTime()
         {
@@ -89,6 +98,14 @@ namespace CShop.User.Service.Handler
             //var ret = JSON
             //return JsonConvert.SerializeObject(finalToken).ToString();
             return finalToken;
+        }
+        public Boolean HttpContextExists()
+        {
+            return _httpContextAccessor.HttpContext != null;
+        }
+        public void DeleteToken()
+        {
+            _httpContextAccessor.HttpContext = null;
         }
 
     }

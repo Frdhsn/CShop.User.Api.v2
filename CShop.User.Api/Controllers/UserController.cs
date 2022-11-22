@@ -37,11 +37,10 @@ namespace CShop.User.Api.Controllers
             return CreatedAtAction(nameof(PostUser), userDto.Id, userDto);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, UserDTO updatedUserDto)
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO updatedUserDto)
         {
             if (id != updatedUserDto.Id)
                 return BadRequest("Something went wrong! Can't update the user.");
-
             var updatedDTO = await _userService.UpdateUser(id, updatedUserDto);
 
             if (updatedDTO == null)

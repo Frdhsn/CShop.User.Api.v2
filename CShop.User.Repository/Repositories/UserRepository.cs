@@ -25,9 +25,11 @@ namespace CShop.User.Repository.Repositories
         {
             return await _context.Users.Where(x => x.UserName == username).FirstOrDefaultAsync<UserModel>();
         }
-        public async Task<UserModel?> GetUserByUserId(int Id)
+        public async Task<UserModel?> GetUserByUserId(int userId)
         {
-            return await _context.Users.FindAsync(Id);
+            //return await _context.Users.FindAsync(Id);
+
+            return await _context.Users.Where(x => x.Id == userId).FirstOrDefaultAsync<UserModel>();
         }
         public async Task<UserModel?> GetUserByEmail(string email)
         {

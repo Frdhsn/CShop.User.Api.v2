@@ -4,6 +4,7 @@ using CShop.User.Repository.Contracts;
 using CShop.User.Service.Contracts;
 using CShop.User.Service.CustomException;
 using CShop.User.Service.DTO;
+using CShop.User.Service.Handler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,51 +61,61 @@ namespace CShop.User.Service.Services
             return userDto;
         }
 
-        public async Task<UserDTO?> UpdateUser(int id, UserDTO updateUserDto)
+        public async Task<UserDTO?> UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
-            //_userdtovalidator.ValidateDTO(updateUserDto);
-            // test for git
-            var currUserId = _passwordH.GetLoggedInId();
-            if (currUserId == -1) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
-            if (currUserId != id) throw new ForbiddenHandler("You don't have the permission!");
-
             var fetchedUser = await _userRepository.GetUserByUserId(id);
-
             if (fetchedUser == null) throw new NotFoundHandler("No user was found with that ID!");
+            //_userdtovalidator.ValidateDTO(updateUserDto);
+            var currUser = _passwordH.GetLoggedInUsername();
+            if (currUser == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
+            if (currUser != fetchedUser.UserName) throw new ForbiddenHandler("You don't have the permission!");
 
-            //var creationTime = _passwordH.GetTokenCreationTime();
-            //if (creationTime == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
 
-            //DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
 
-            //if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
-            //    throw new UnauthorisedHandler("JWT Expired! Login again!");
+            var creationTime = _passwordH.GetTokenCreationTime();
+            if (creationTime == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
+
+            DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
+
+            if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
+                throw new UnauthorisedHandler("JWT Expired! Login again!");
 
             UserModel mappedUser = _mapper.Map<UserModel>(updateUserDto);
 
 
             var updatedUser = await _userRepository.UpdateUser(id, mappedUser);
-            // idk it's needed
-            if (updatedUser == null) throw new NotFoundHandler("No user was found with that ID!");
+            if (updateUserDto.Password != null && updateUserDto.Password != "")
+            {
+                if (updateUserDto.Password.Length < 8) throw new BadRequestHandler("Password length must be at least 8");
+                Tuple<byte[], byte[]> passwordObject = _passwordH.HashPassword(updateUserDto.Password);
+                byte[] passwordSalt = passwordObject.Item2;
+                byte[] passwordHash = passwordObject.Item1;
+                mappedUser.PasswordHash = passwordHash;
+            }
+            mappedUser.LastModifiedTime = DateTime.UtcNow;
 
-            var userDto = _mapper.Map<UserDTO>(updatedUser);
+            var newUser = await _userRepository.UpdateUser(id, mappedUser);
+            var userDto = _mapper.Map<UserDTO>(newUser);
             return userDto;
         }
         public async Task<Boolean> DeleteUser(int id)
         {
             var fetchedUser = await _userRepository.GetUserByUserId(id);
-
             if (fetchedUser == null) throw new NotFoundHandler("No user was found with that ID!");
-            var currUserId = _passwordH.GetLoggedInId();
-            if (currUserId != id) throw new ForbiddenHandler("You don't have the permission!");
+            var currUser = _passwordH.GetLoggedInUsername();
+            if (currUser == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
+            if (currUser != fetchedUser.UserName) throw new ForbiddenHandler("You don't have the permission!");
 
-            //var creationTime = _passwordH.GetTokenCreationTime();
-            //if (creationTime == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
 
-            //DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
 
-            //if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
-            //    throw new UnauthorisedHandler("JWT Expired! Login again!");
+            var creationTime = _passwordH.GetTokenCreationTime();
+            if (creationTime == null) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
+
+            DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
+
+            if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
+                throw new UnauthorisedHandler("JWT Expired! Login again!");
+
             return await _userRepository.DeleteUser(id);
         }
     }

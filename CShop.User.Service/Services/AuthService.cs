@@ -32,8 +32,8 @@ namespace CShop.User.Service.Services
             Tuple<byte[], byte[]> hashedPassword = _passwordH.HashPassword(req.Password);
 
             var user = _mapper.Map<UserModel>(req);
-            user.PasswordHash = hashedPassword.Item1;
-            user.PasswordSalt = hashedPassword.Item2;
+            user.PasswordHash = hashedPassword.Item2;
+            user.PasswordSalt = hashedPassword.Item1;
             user.LastModifiedTime = DateTime.UtcNow;
             user.CreationTime = DateTime.UtcNow;
 
