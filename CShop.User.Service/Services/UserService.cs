@@ -63,7 +63,7 @@ namespace CShop.User.Service.Services
         public async Task<UserDTO?> UpdateUser(int id, UserDTO updateUserDto)
         {
             //_userdtovalidator.ValidateDTO(updateUserDto);
-
+            // test for git
             var currUserId = _passwordH.GetLoggedInId();
             if (currUserId == -1) throw new UnauthorisedHandler("You're not logged in! Please log in to get access.");
             if (currUserId != id) throw new ForbiddenHandler("You don't have the permission!");
