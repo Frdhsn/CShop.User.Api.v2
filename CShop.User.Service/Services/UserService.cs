@@ -23,10 +23,10 @@ namespace CShop.User.Service.Services
             _mapper = mapper;
             _passwordH = passwordH;
         }
-        public async Task<List<UserDTO>> GetAllUsers()
+        public async Task<List<ShowUserDTO>> GetAllUsers()
         {
             var users = await _userRepository.GetAllUsers();
-            return users.Select(user => _mapper.Map<UserDTO>(user)).ToList();
+            return users.Select(user => _mapper.Map<ShowUserDTO>(user)).ToList();
         }
         public async Task<UserDTO?> GetUserByUsername(string username)
         {
@@ -35,12 +35,12 @@ namespace CShop.User.Service.Services
             if (user == null) throw new NotFoundHandler("No user was found with that Username!");
             return _mapper.Map<UserDTO>(user);
         }
-        public async Task<UserDTO?> GetUserByUserId(int Id)
+        public async Task<ShowUserDTO?> GetUserByUserId(int Id)
         {
             var user = await _userRepository.GetUserByUserId(Id);
 
             if (user == null) throw new NotFoundHandler("No user was found with that Username!");
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<ShowUserDTO>(user);
         }
         public async Task<UserDTO?> GetUserByEmail(string email)
         {
@@ -61,7 +61,7 @@ namespace CShop.User.Service.Services
             return userDto;
         }
 
-        public async Task<UserDTO?> UpdateUser(int id, UpdateUserDTO updateUserDto)
+        public async Task<ShowUserDTO?> UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
             var fetchedUser = await _userRepository.GetUserByUserId(id);
             if (fetchedUser == null) throw new NotFoundHandler("No user was found with that ID!");
@@ -77,13 +77,12 @@ namespace CShop.User.Service.Services
 
             DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
 
-            if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
+            if (tokenCreationTime.ToOADate() + 86400000 < fetchedUser.LastModifiedTime.ToOADate())
                 throw new UnauthorisedHandler("JWT Expired! Login again!");
 
             UserModel mappedUser = _mapper.Map<UserModel>(updateUserDto);
 
 
-            var updatedUser = await _userRepository.UpdateUser(id, mappedUser);
             if (updateUserDto.Password != null && updateUserDto.Password != "")
             {
                 if (updateUserDto.Password.Length < 8) throw new BadRequestHandler("Password length must be at least 8");
@@ -95,7 +94,7 @@ namespace CShop.User.Service.Services
             mappedUser.LastModifiedTime = DateTime.UtcNow;
 
             var newUser = await _userRepository.UpdateUser(id, mappedUser);
-            var userDto = _mapper.Map<UserDTO>(newUser);
+            var userDto = _mapper.Map<ShowUserDTO>(newUser);
             return userDto;
         }
         public async Task<Boolean> DeleteUser(int id)

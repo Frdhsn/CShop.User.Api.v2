@@ -10,12 +10,12 @@ namespace CShop.User.Service.Contracts
     public interface IUserService
     {
 
-        Task<List<UserDTO>> GetAllUsers();
-        Task<UserDTO?> GetUserByUserId(int Id);
+        Task<List<ShowUserDTO>> GetAllUsers();
+        Task<ShowUserDTO?> GetUserByUserId(int Id);
         Task<UserDTO?> GetUserByUsername(string username);
         Task<UserDTO?> GetUserByEmail(string email);
         Task<UserDTO?> PostUser(UserDTO user);
-        Task<UserDTO?> UpdateUser(int Id, UpdateUserDTO user);
+        Task<ShowUserDTO?> UpdateUser(int Id, UpdateUserDTO user);
         Task<Boolean> DeleteUser(int Id);
     }
 }

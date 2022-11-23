@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CShop.User.Database.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221116035454_CreateInit")]
-    partial class CreateInit
+    [Migration("20221123072425_createInitial")]
+    partial class createInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,30 +23,6 @@ namespace CShop.User.Database.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("CShop.User.Database.Model.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("UserModelId");
-
-                    b.ToTable("Cart");
-                });
 
             modelBuilder.Entity("CShop.User.Database.Model.UserModel", b =>
                 {
@@ -103,18 +79,6 @@ namespace CShop.User.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CShop.User.Database.Model.Product", b =>
-                {
-                    b.HasOne("CShop.User.Database.Model.UserModel", null)
-                        .WithMany("Cart")
-                        .HasForeignKey("UserModelId");
-                });
-
-            modelBuilder.Entity("CShop.User.Database.Model.UserModel", b =>
-                {
-                    b.Navigation("Cart");
                 });
 #pragma warning restore 612, 618
         }

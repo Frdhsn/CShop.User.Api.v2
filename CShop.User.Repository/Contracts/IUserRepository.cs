@@ -16,9 +16,9 @@ namespace CShop.User.Repository.Contracts
         Task<UserModel?> PostUser(UserModel user);
         Task<UserModel?> UpdateUser(int id, UserModel user);
         Task<Boolean> DeleteUser(int id);
-        Task<UserModel?> AddItem(int id, Product product);
-        Task<UserModel> CreateCart(int id, ICollection<Product>cart);
-        Task<ICollection<Product>> GetCart(int id);
-        Task<Boolean> ResetCart(int id);
+        //Task<UserModel?> AddItem(int id, Product product);
+        //Task<UserModel> CreateCart(int id, ICollection<Product>cart);
+        //Task<ICollection<Product>> GetCart(int id);
+        //Task<Boolean> ResetCart(int id);
     }
 }

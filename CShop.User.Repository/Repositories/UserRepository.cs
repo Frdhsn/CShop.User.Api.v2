@@ -49,10 +49,19 @@ namespace CShop.User.Repository.Repositories
             {
                 return null;
             }
-            updatedUser.UserName = user.UserName;
-            updatedUser.Name = user.Name;
-            updatedUser.Email = user.Email;
-            updatedUser.Address = user.Address;
+            if(user.UserName != null)
+                updatedUser.UserName = user.UserName;
+            if (user.Name != null)
+                updatedUser.Name = user.Name;
+            if (user.Email != null)
+                updatedUser.Email = user.Email;
+            if (user.Address != null)
+                updatedUser.Address = user.Address;
+            if (user.PasswordHash != null)
+            {
+                updatedUser.PasswordHash = user.PasswordHash;
+                updatedUser.PasswordSalt = user.PasswordSalt;
+            }
             updatedUser.LastModifiedTime = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             return updatedUser;
@@ -69,53 +78,53 @@ namespace CShop.User.Repository.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<UserModel?> AddItem(int id, Product product)
-        {
-            var updatedUser = await _context.Users.FindAsync(id);
+        //public async Task<UserModel?> AddItem(int id, Product product)
+        //{
+        //    var updatedUser = await _context.Users.FindAsync(id);
 
-            if (updatedUser == null)
-            {
-                return null;
-            }
-            updatedUser.Cart.Add(product);
-            updatedUser.LastModifiedTime = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-            return updatedUser;
-        }
-        public async Task<UserModel> CreateCart(int id, ICollection<Product> cart)
-        {
-            var updatedUser = await _context.Users.FindAsync(id);
+        //    if (updatedUser == null)
+        //    {
+        //        return null;
+        //    }
+        //    updatedUser.Cart.Add(product);
+        //    updatedUser.LastModifiedTime = DateTime.UtcNow;
+        //    await _context.SaveChangesAsync();
+        //    return updatedUser;
+        //}
+        //public async Task<UserModel> CreateCart(int id, ICollection<Product> cart)
+        //{
+        //    var updatedUser = await _context.Users.FindAsync(id);
 
-            if (updatedUser == null)
-            {
-                return null;
-            }
-            updatedUser.Cart = cart;
-            updatedUser.LastModifiedTime = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-            return updatedUser;
-        }
-        public async Task<ICollection<Product>> GetCart(int id)
-        {
-            var updatedUser = await _context.Users.FindAsync(id);
+        //    if (updatedUser == null)
+        //    {
+        //        return null;
+        //    }
+        //    updatedUser.Cart = cart;
+        //    updatedUser.LastModifiedTime = DateTime.UtcNow;
+        //    await _context.SaveChangesAsync();
+        //    return updatedUser;
+        //}
+        //public async Task<ICollection<Product>> GetCart(int id)
+        //{
+        //    var updatedUser = await _context.Users.FindAsync(id);
 
-            if (updatedUser == null)
-            {
-                return null;
-            }
-            return updatedUser.Cart;
-        }
-        public async Task<Boolean> ResetCart(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
+        //    if (updatedUser == null)
+        //    {
+        //        return null;
+        //    }
+        //    return updatedUser.Cart;
+        //}
+        //public async Task<Boolean> ResetCart(int id)
+        //{
+        //    var user = await _context.Users.FindAsync(id);
 
-            if (user == null)
-            {
-                return false;
-            }
-            user.Cart.Clear();
-            await _context.SaveChangesAsync();
-            return true;
-        }
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
+        //    user.Cart.Clear();
+        //    await _context.SaveChangesAsync();
+        //    return true;
+        //}
     }
 }

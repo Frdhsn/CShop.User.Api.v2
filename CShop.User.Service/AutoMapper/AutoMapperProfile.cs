@@ -15,6 +15,7 @@ namespace CShop.User.Service.AutoMapper
         {
             CreateMap<UserDTO, UserModel>().ReverseMap();
             CreateMap<UpdateUserDTO, UserModel>().ReverseMap();
+            CreateMap<ShowUserDTO, UserModel>().ReverseMap();
             CreateMap<LoginDTO, UserModel>();
             CreateMap<SignUpDTO, UserModel>();
 
