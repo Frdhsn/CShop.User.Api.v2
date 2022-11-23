@@ -2,6 +2,7 @@
 using CShop.User.Service.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace CShop.User.Api.Controllers
 {
@@ -51,7 +52,11 @@ namespace CShop.User.Api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var deletedUser = await _userService.DeleteUser(id);
+            var accessToken = Request.Headers[HeaderNames.Authorization];
+            //create a token using this user's info
+            // send request to order service
+            //now delete user
+            var deletedUser = await _userService.DeleteUser(accessToken.ToString(), id);
             return NoContent();
         }
     }

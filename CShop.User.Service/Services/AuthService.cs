@@ -7,22 +7,27 @@ using CShop.User.Service.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CShop.User.Service.Services
 {
+    
+
     public class AuthService: IAuthService
     {
         private readonly IMapper _mapper;
         private readonly IPasswordHandler _passwordH;
         private readonly IUserRepository _userRepository;
-
-        public AuthService(IUserRepository userRepository, IMapper mapper, IPasswordHandler passwordH)
+        private readonly HttpClient _httpClient;
+        public AuthService(IUserRepository userRepository, IMapper mapper, IPasswordHandler passwordH, HttpClient httpClient)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _passwordH = passwordH;
+            _httpClient = httpClient;
         }
 
         public async Task<UserDTO> SignUp(SignUpDTO req)
@@ -40,6 +45,20 @@ namespace CShop.User.Service.Services
             var newUser = await _userRepository.PostUser(user);
             var userDTO = _mapper.Map<UserDTO>(newUser);
             userDTO.Token = _passwordH.CreateToken(newUser);
+
+            // Interservice comm: create Cart
+            _httpClient.DefaultRequestHeaders.Add("Authorization", userDTO.Token);
+            var url = "https://cshopapigateway.azurewebsites.net/api/carts";
+            //var jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive= true };
+
+            var payload = newUser.Id;
+            var newUserSerialized = JsonSerializer.Serialize(payload);
+
+            var stringContent = new StringContent(newUserSerialized, Encoding.UTF8, "application/json");
+            using HttpResponseMessage response = await _httpClient.PostAsync(url, stringContent);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
             return userDTO;
         }
         public async Task<UserDTO> Login(LoginDTO req)
@@ -56,6 +75,5 @@ namespace CShop.User.Service.Services
             userDTO.Token = token;
             return userDTO;
         }
-
     }
 }

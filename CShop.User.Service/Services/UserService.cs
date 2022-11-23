@@ -5,6 +5,7 @@ using CShop.User.Service.Contracts;
 using CShop.User.Service.CustomException;
 using CShop.User.Service.DTO;
 using CShop.User.Service.Handler;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,13 @@ namespace CShop.User.Service.Services
         private readonly IMapper _mapper;
         private readonly IPasswordHandler _passwordH;
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository, IMapper mapper, IPasswordHandler passwordH) {
+        private readonly HttpClient _httpClient;
+        public UserService(IUserRepository userRepository, IMapper mapper, IPasswordHandler passwordH, HttpClient httpClient)
+        {
             _userRepository = userRepository;
             _mapper = mapper;
             _passwordH = passwordH;
+            _httpClient = httpClient;
         }
         public async Task<List<ShowUserDTO>> GetAllUsers()
         {
@@ -97,7 +101,7 @@ namespace CShop.User.Service.Services
             var userDto = _mapper.Map<ShowUserDTO>(newUser);
             return userDto;
         }
-        public async Task<Boolean> DeleteUser(int id)
+        public async Task<Boolean> DeleteUser(string accessToken, int id)
         {
             var fetchedUser = await _userRepository.GetUserByUserId(id);
             if (fetchedUser == null) throw new NotFoundHandler("No user was found with that ID!");
@@ -113,8 +117,15 @@ namespace CShop.User.Service.Services
             DateTime tokenCreationTime = Convert.ToDateTime(creationTime);
 
             if (DateTime.Compare(tokenCreationTime, fetchedUser.LastModifiedTime) < 0)
-                throw new UnauthorisedHandler("JWT Expired! Login again!");
+                throw new UnauthorisedHandler("Session Expired! Login again!");
 
+            // InterService Communication Starts
+            //_httpClient.DefaultRequestHeaders.Add("Authorization", accessToken);
+
+            //using HttpResponseMessage response = await _httpClient.DeleteAsync($"https://cshopapigateway.azurewebsites.net/api/carts/{id}");
+            //response.EnsureSuccessStatusCode();
+            //string responseBody = await response.Content.ReadAsStringAsync();
+            // InterService Communication Ends
             return await _userRepository.DeleteUser(id);
         }
     }
