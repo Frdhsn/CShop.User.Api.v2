@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CShop.User.Database\CShop.User.Database.csproj" />
-    <ProjectReference Include="..\CShop.User.Repository\CShop.User.Repository.csproj" />
     <ProjectReference Include="..\CShop.User.Service\CShop.User.Service.csproj" />
   </ItemGroup>
 

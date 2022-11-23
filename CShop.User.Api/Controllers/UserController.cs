@@ -1,5 +1,6 @@
 ﻿using CShop.User.Service.Contracts;
 using CShop.User.Service.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CShop.User.Api.Controllers
@@ -36,7 +37,7 @@ namespace CShop.User.Api.Controllers
 
             return CreatedAtAction(nameof(PostUser), userDto.Id, userDto);
         }
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO updatedUserDto)
         {
             if (id != updatedUserDto.Id)
@@ -47,7 +48,7 @@ namespace CShop.User.Api.Controllers
                 return BadRequest("Something went wrong! Can't update the user.");
             return Ok(updatedDTO);
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var deletedUser = await _userService.DeleteUser(id);

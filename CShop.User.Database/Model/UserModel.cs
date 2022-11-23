@@ -20,6 +20,5 @@ namespace CShop.User.Database.Model
 
         public DateTime CreationTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
-        public virtual ICollection<Product> Cart { get; set; }
     }
 }

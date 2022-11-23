@@ -16,12 +16,10 @@ namespace CShop.User.Database.Context
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<UserModel> Users { get; set; }
-        public DbSet<Product> Cart { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             new UserConfig().Configure(builder.Entity<UserModel>());
-            new CartConfig().Configure(builder.Entity<Product>());
         }
     }
 }
