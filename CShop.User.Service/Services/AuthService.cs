@@ -46,8 +46,9 @@ namespace CShop.User.Service.Services
             var userDTO = _mapper.Map<UserDTO>(newUser);
             userDTO.Token = _passwordH.CreateToken(newUser);
 
+            string token = "Bearer " + userDTO.Token;
             // Interservice comm: create Cart
-            _httpClient.DefaultRequestHeaders.Add("Authorization", userDTO.Token);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", token);
             var url = "https://cshopapigateway.azurewebsites.net/api/carts";
             //var jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive= true };
 
