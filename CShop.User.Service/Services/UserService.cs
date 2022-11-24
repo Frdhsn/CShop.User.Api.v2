@@ -94,6 +94,7 @@ namespace CShop.User.Service.Services
                 byte[] passwordSalt = passwordObject.Item2;
                 byte[] passwordHash = passwordObject.Item1;
                 mappedUser.PasswordHash = passwordHash;
+                mappedUser.PasswordSalt = passwordSalt;
             }
             mappedUser.LastModifiedTime = DateTime.UtcNow;
 
@@ -120,11 +121,11 @@ namespace CShop.User.Service.Services
                 throw new UnauthorisedHandler("Session Expired! Login again!");
 
             // InterService Communication Starts
-            //_httpClient.DefaultRequestHeaders.Add("Authorization", accessToken);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", accessToken);
 
-            //using HttpResponseMessage response = await _httpClient.DeleteAsync($"https://cshopapigateway.azurewebsites.net/api/carts/{id}");
-            //response.EnsureSuccessStatusCode();
-            //string responseBody = await response.Content.ReadAsStringAsync();
+            using HttpResponseMessage response = await _httpClient.DeleteAsync($"https://cshopapigateway.azurewebsites.net/api/carts/{id}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
             // InterService Communication Ends
             return await _userRepository.DeleteUser(id);
         }
