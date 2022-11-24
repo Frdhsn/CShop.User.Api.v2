@@ -4,6 +4,7 @@ using CShop.User.Repository.Contracts;
 using CShop.User.Service.Contracts;
 using CShop.User.Service.CustomException;
 using CShop.User.Service.DTO;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,14 +47,17 @@ namespace CShop.User.Service.Services
             var userDTO = _mapper.Map<UserDTO>(newUser);
             userDTO.Token = _passwordH.CreateToken(newUser);
 
-            string token = "Bearer " + userDTO.Token;
+            //string token = "Bearer " + userDTO.Token;
+            string token = "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjE1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVHJ1ZSIsImV4cCI6MTY3MzA3NTU4MH0.eG0tE3Du1dv45ymIyTCIqDOZZvajHU9JOdtbGT3Usn0";
             // Interservice comm: create Cart
             _httpClient.DefaultRequestHeaders.Add("Authorization", token);
             var url = "https://cshopapigateway.azurewebsites.net/api/carts";
             //var jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive= true };
 
-            var payload = newUser.Id;
-            var newUserSerialized = JsonSerializer.Serialize(payload);
+            //var payload = { "userId": newUser.Id };
+            dynamic payload = new JObject();
+            payload.userid = newUser.Id;
+            var newUserSerialized = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
 
             var stringContent = new StringContent(newUserSerialized, Encoding.UTF8, "application/json");
             using HttpResponseMessage response = await _httpClient.PostAsync(url, stringContent);
