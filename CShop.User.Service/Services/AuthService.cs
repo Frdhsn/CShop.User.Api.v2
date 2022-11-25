@@ -48,7 +48,7 @@ namespace CShop.User.Service.Services
             userDTO.Token = _passwordH.CreateToken(newUser);
 
             //string token = "Bearer " + userDTO.Token;
-            string token = "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjE1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVHJ1ZSIsImV4cCI6MTY3MzA3NTU4MH0.eG0tE3Du1dv45ymIyTCIqDOZZvajHU9JOdtbGT3Usn0";
+            string token = "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiMTEvMjUvMjAyMiAxMDo0ODowNyIsImV4cCI6MTY3MzY5MzI4N30.HN8-z7rJpDsinuK90qbeq3hkneXPZbwQhqXixIMSUF0";
             // Interservice comm: create Cart
             _httpClient.DefaultRequestHeaders.Add("Authorization", token);
             var url = "https://cshopapigateway.azurewebsites.net/api/carts";
