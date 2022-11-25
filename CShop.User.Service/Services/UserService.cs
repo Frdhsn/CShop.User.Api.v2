@@ -43,7 +43,7 @@ namespace CShop.User.Service.Services
         {
             var user = await _userRepository.GetUserByUserId(Id);
 
-            if (user == null) throw new NotFoundHandler("No user was found with that Username!");
+            if (user == null) throw new NotFoundHandler("No user was found with that UserId!");
             return _mapper.Map<ShowUserDTO>(user);
         }
         public async Task<UserDTO?> GetUserByEmail(string email)
@@ -91,8 +91,8 @@ namespace CShop.User.Service.Services
             {
                 if (updateUserDto.Password.Length < 8) throw new BadRequestHandler("Password length must be at least 8");
                 Tuple<byte[], byte[]> passwordObject = _passwordH.HashPassword(updateUserDto.Password);
-                byte[] passwordSalt = passwordObject.Item2;
-                byte[] passwordHash = passwordObject.Item1;
+                byte[] passwordHash = passwordObject.Item2;
+                byte[] passwordSalt = passwordObject.Item1;
                 mappedUser.PasswordHash = passwordHash;
                 mappedUser.PasswordSalt = passwordSalt;
             }

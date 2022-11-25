@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CShop.User.Database.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221123072425_createInitial")]
+    [Migration("20221125091504_createInitial")]
     partial class createInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
