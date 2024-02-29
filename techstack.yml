@@ -2,7 +2,7 @@ repo_name: Frdhsn/CShop.User.Api.v2
 report_id: 53188f90ddf083062a72c0a05ecf204d
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-23T18:55:04+00:00'
+timestamp: '2024-02-29T19:36:13+00:00'
 requested_by: Frdhsn
 provider: github
 branch: master
@@ -78,7 +78,7 @@ tools:
   last_updated_by: frdhsn
   last_updated_on: 2022-11-21 10:01:13.000000000 Z
 - name: Entity Framework Core
-  description: 'Lightweight and cross-platform version of the popular Entity Framework '
+  description: Lightweight and cross-platform version of the popular Entity Framework
   website_url: https://docs.microsoft.com/en-us/ef/core/
   license: MIT
   open_source: true
